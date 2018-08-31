@@ -1,6 +1,6 @@
 BACKUP ~arestorationp/backup~
 AUTHOR ~Almateria (bukato@icloud.com)~
-VERSION ~v8.2.9~
+VERSION ~v8.3~
 README "arestorationp/language/%LANGUAGE%/readme.html" "arestorationp/language/english/readme.html"
 AUTO_TRA ~arestorationp/language/%s~
 //%
@@ -38,6 +38,7 @@ ALWAYS
     polish => cp1250
     schinese => cp936
     french => cp1252
+		german => cp1252
   END
   LAF HANDLE_CHARSETS
     INT_VAR
@@ -97,6 +98,12 @@ LANGUAGE ~Francais (by Isaya and the d'Oghmatiques)~
          ~arestorationp/language/english/setup.tra~
          ~arestorationp/language/french/game.tra~
          ~arestorationp/language/french/setup-%WEIDU_OS%.tra~
+LANGUAGE ~Deutsch (by Dachrisma)~
+		 ~french~
+         ~arestorationp/language/english/game.tra~
+         ~arestorationp/language/english/setup.tra~
+         ~arestorationp/language/german/game.tra~
+         ~arestorationp/language/german/setup.tra~
 
 BEGIN @100
 ACTION_IF FILE_EXISTS_IN_GAME ~clck28.itm~ BEGIN
@@ -2497,17 +2504,53 @@ DEPRECATED @1100
 
 BEGIN @1200
 REQUIRE_PREDICATE NOT GAME_IS ~bg2ee eet~ @1201
-COPY_EXISTING ~ar0602.BCS~ ~override~
+COPY_EXISTING ~ar0602.bcs~ ~override~
   DECOMPILE_AND_PATCH BEGIN
-    REPLACE_TEXTUALLY EXACT_MATCH ~ActionOverride("Malaaq",MoveBetweenAreas("AR0601",[345.591],14))~ ~ActionOverride("Malaaq",TakeItemListPartyNum("IMPORT02",1))
-		ActionOverride("Malaaq",MoveBetweenAreas("AR0601",[345.591],14))~
+    REPLACE_TEXTUALLY ~ActionOverride("Malaaq",MoveBetweenAreas("AR0601",\[345\.591\],SE))~ ~ActionOverride("Malaaq",TakeItemListPartyNum("IMPORT02",1))~
   END
-  BUT_ONLY
+	
+COPY_EXISTING ~idemon01.cre~ ~override~
+              ~idemon02.cre~ ~override~
+  REMOVE_CRE_ITEM ~sw1h01~ ~sw1h02~ ~sw2h16~
+  ADD_CRE_ITEM ~sw2h16~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP TWOHANDED
+	
+COPY_EXISTING ~idjinni.cre~ ~override~
+  REMOVE_CRE_ITEM ~sw2h16~
+  ADD_CRE_ITEM ~sw2h16~ #0 #0 #0 ~IDENTIFIED~ ~INV1~
+  WRITE_ASCII 0x250 l-import #8
 
-COPY_EXISTING import02.2da override
-SET_2DA_ENTRY 1 0 1 ~DAGG04~
+COPY_EXISTING ~ribald.cre~ ~override~
+  REMOVE_CRE_ITEM ~sw1h06~ ~sw1h41~
+  ADD_CRE_ITEM ~sw1h06~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP
 
-BEGIN @1300EXTEND_BOTTOM ~player1d.bcs~ ~arestorationp/baf/player1d.baf~
+COPY_EXISTING ~ax1h07.itm~ ~override~
+  WRITE_SHORT 0x42 40
+	
+OUTER_FOR (index = 4 ; index >= 0 ; --index) BEGIN
+  EXTEND_BOTTOM ~l-import.bcs~ ~arestorationp/import02/l-import_middle.baf~ EVALUATE_BUFFER
+END
+EXTEND_BOTTOM ~l-import.bcs~ ~arestorationp/import02/l-import_middle.baf~ EVALUATE_BUFFER
+
+COPY_EXISTING ~ribald.sto~ ~override~
+  ADD_STORE_ITEM ~halb07~ AFTER ~halb03~ #1 #0 #0 ~IDENTIFIED~ #1
+	
+EXTEND_BOTTOM ~ar0204.bcs~   ~arestorationp/import02/ar0204.baf~
+EXTEND_BOTTOM ~ar0413.bcs~   ~arestorationp/import02/ar0413.baf~
+EXTEND_BOTTOM ~ar1401.bcs~   ~arestorationp/import02/ar1401.baf~
+EXTEND_BOTTOM ~ribald.bcs~   ~arestorationp/import02/ribald.baf~
+
+COPY_EXISTING ~ar0413.are~ ~override~
+  LPF fj_are_structure INT_VAR fj_con_itm_idx = 0 STR_VAR fj_name = AX1H02 fj_structure_type = itm END
+  LPF fj_are_structure INT_VAR fj_con_itm_idx = 0 STR_VAR fj_name = AX1H07 fj_structure_type = itm END
+
+COPY_EXISTING ~ar0204.are~ ~override~
+  LPF fj_are_structure INT_VAR fj_con_itm_idx = 2 STR_VAR fj_name = hamm08 fj_structure_type = itm END
+
+COPY_EXISTING ~ar1401.are~ ~override~
+  LPF fj_are_structure INT_VAR fj_con_itm_idx = 2 STR_VAR fj_name = slng10 fj_structure_type = itm END
+
+BEGIN @1300
+EXTEND_BOTTOM ~player1d.bcs~ ~arestorationp/baf/player1d.baf~
 EXTEND_BOTTOM ~ar2700.bcs~ ~arestorationp/baf/ar2700.baf~
 
 COPY_EXISTING ~ar2700.are~ override
