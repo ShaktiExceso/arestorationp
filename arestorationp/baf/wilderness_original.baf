@@ -7,5 +7,4 @@ THEN
 		CreateCreature("REBAND03",[552.476],10)
 		CreateCreature("REBAND04",[427.548],10)
 		CreateCreature("REBAND05",[525.591],10)
-		Continue()
 END
