@@ -104,13 +104,13 @@ LANGUAGE ~Deutsch (by Dachrisma)~
          ~arestorationp/language/english/game.tra~
          ~arestorationp/language/english/setup.tra~
          ~arestorationp/language/german/game.tra~
-         ~arestorationp/language/german/setup.tra~
+         ~arestorationp/language/german/setup-%WEIDU_OS%.tra~
 LANGUAGE ~Portugues brasileiro (by Felipe)~
 		 ~ptbr~
          ~arestorationp/language/english/game.tra~
          ~arestorationp/language/english/setup.tra~
          ~arestorationp/language/ptbr/game.tra~
-         ~arestorationp/language/ptbr/setup.tra~
+         ~arestorationp/language/ptbr/setup-%WEIDU_OS%.tra~
 
 BEGIN @100
 ACTION_IF FILE_EXISTS_IN_GAME ~clck28.itm~ BEGIN
